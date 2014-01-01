@@ -1,0 +1,7 @@
+Build.PL
+Changes
+lib/WebService/Fitbit.pm
+LICENSE
+MANIFEST			This list of files
+README.md
+t/00-load.t
