@@ -22,11 +22,15 @@ my $builder = Module::Build->new(
 
     test_requires => {
         'Config' => '0',
+        'LWP::Authen::OAuth' => '1.02',
+        'REST::Client' => '271',
         'Test::More' => '0',
     },
 
     requires => {
         'perl' => '5.006',
+        'LWP::Authen::OAuth' => '1.02',
+        'REST::Client' => '271',
     },
 );
 

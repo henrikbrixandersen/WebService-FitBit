@@ -7,5 +7,3 @@ use WebService::Fitbit;
 
 my $fitbit = WebService::Fitbit->new;
 
-use Data::Dumper;
-print Dumper $fitbit;
