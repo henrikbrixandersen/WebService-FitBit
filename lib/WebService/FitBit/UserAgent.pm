@@ -16,7 +16,69 @@ accessing data on fitbit.com.
 C<WebService::FitBit::UserAgent> is a C<LWP::Authen::OAuth> subclass
 prepared for performing authenticated requests to fitbit.com.
 
-Please see L<LWP::Authen::OAuth> for API details.
+Please see L<LWP::Authen::OAuth> for full API details.
+
+=head1 METHODS
+
+=head2 $ua = WebService::FitBit::UserAgent->new(...)
+
+Takes the same options as L<LWP::Authen::OAuth/new>.
+
+=cut
+
+sub new {
+    my $class = shift;
+
+    my $self = $class->SUPER::new(@_);
+
+    $self->{fitbit_request_token_url} = 'http://api.fitbit.com/oauth/request_token';
+    $self->{fitbit_authorize_url}     = 'http://www.fitbit.com/oauth/authorize';
+    $self->{fitbit_access_token_url}  = 'http://api.fitbit.com/oauth/access_token';
+
+    return $self;
+}
+
+=head2 $url = $ua->fitbit_request_token_url([URL])
+
+Get and optionally set the Fitbit C<Request Token> URL. Defaults to
+L<http://api.fitbit.com/oauth/request_token>.
+
+=cut
+
+sub fitbit_request_token_url {
+    my $self = shift;
+
+    $self->{fitbit_request_token_url} = shift if (@_);
+    return $self->{fitbit_request_token_url};
+}
+
+=head2 $url = $ua->fitbit_authorize_url([URL])
+
+Get and optionally set the Fitbit C<Authorize> URL. Defaults to
+L<http://www.fitbit.com/oauth/authorize>.
+
+=cut
+
+sub fitbit_authorize_url {
+    my $self = shift;
+
+    $self->{fitbit_authorize_url} = shift if (@_);
+    return $self->{fitbit_authorize_url};
+}
+
+=head2 $url = $ua->fitbit_access_token_url([URL])
+
+Get and optionally set the Fitbit C<Access Token> URL. Defaults to
+L<http://api.fitbit.com/oauth/access_token>.
+
+=cut
+
+sub fitbit_access_token_url {
+    my $self = shift;
+
+    $self->{fitbit_access_token_url} = shift if (@_);
+    return $self->{fitbit_access_token_url};
+}
 
 =head1 AUTHOR
 
