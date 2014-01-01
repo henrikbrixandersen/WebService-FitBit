@@ -1,6 +1,6 @@
 Build.PL
 Changes
-lib/WebService/Fitbit.pm
+lib/WebService/FitBit.pm
 LICENSE
 MANIFEST			This list of files
 README.md

@@ -1,14 +1,14 @@
-package WebService::Fitbit;
+package WebService::FitBit;
 
 use 5.006;
 use strict;
 use warnings;
 
-use WebService::Fitbit::UserAgent;
+use WebService::FitBit::UserAgent;
 
 =head1 NAME
 
-WebService::Fitbit - Perl module for accessing data on fitbit.com
+WebService::FitBit - Perl module for accessing data on fitbit.com
 
 =head1 VERSION
 
@@ -20,25 +20,25 @@ our $VERSION = '0.10';
 
 =head1 SYNOPSIS
 
-C<WebService::Fitbit> provides an API for accessing data on
+C<WebService::FitBit> provides an API for accessing data on
 L<http://fitbit.com>.
 
 =head1 METHODS
 
-=head2 $fitbit = WebService::Fitbit->new([%config])
+=head2 $fitbit = WebService::FitBit->new([%config])
 
-Construct a new C<WebService::Fitbit> object. Takes an optional hash
+Construct a new C<WebService::FitBit> object. Takes an optional hash
 with the following keys:
 
 =over 4
 
 =item useragent
 
-A L<WebService::Fitbit::UserAgent> object (or any other
+A L<WebService::FitBit::UserAgent> object (or any other
 L<LWP::UserAgent> subclass capable of performing OAuth authenticated
 requests againt fitbit.com).
 
-A default, unauthenticated L<WebService::Fitbit::UserAgent> instance
+A default, unauthenticated L<WebService::FitBit::UserAgent> instance
 will be provided for you if this key is not specified.
 
 =back
@@ -53,7 +53,7 @@ sub new {
     if ($config{useragent}) {
         $ua = $config{useragent};
     } else {
-        $ua = WebService::Fitbit::UserAgent->new;
+        $ua = WebService::FitBit::UserAgent->new;
     }
 
     my $self = {
@@ -68,7 +68,7 @@ sub new {
 
 Get the L<LWP::UserAgent> instance used for making authenticated
 requests against fitbit.com, typically an instance of
-L<WebService::Fitbit::UserAgent>.
+L<WebService::FitBit::UserAgent>.
 
 =cut
 
@@ -86,7 +86,7 @@ Henrik Brix Andersen, C<< <brix at cpan.org> >>
 
 Please report any bugs or feature requests to C<bug-webservice-fitbit at
 rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WebService-Fitbit>.  I
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WebService-FitBit>.  I
 will be notified, and then you'll automatically be notified of
 progress on your bug as I make changes.
 
@@ -94,7 +94,7 @@ progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc WebService::Fitbit
+    perldoc WebService::FitBit
 
 You can also look for information at:
 
@@ -102,19 +102,19 @@ You can also look for information at:
 
 =item * RT: CPAN's request tracker (report bugs here)
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=WebService-Fitbit>
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=WebService-FitBit>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
-L<http://annocpan.org/dist/WebService-Fitbit>
+L<http://annocpan.org/dist/WebService-FitBit>
 
 =item * CPAN Ratings
 
-L<http://cpanratings.perl.org/d/WebService-Fitbit>
+L<http://cpanratings.perl.org/d/WebService-FitBit>
 
 =item * Search CPAN
 
-L<http://search.cpan.org/dist/WebService-Fitbit/>
+L<http://search.cpan.org/dist/WebService-FitBit/>
 
 =back
 
@@ -141,4 +141,4 @@ later version, or
 
 =cut
 
-1; # End of WebService::Fitbit
+1; # End of WebService::FitBit

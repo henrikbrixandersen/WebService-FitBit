@@ -1,4 +1,4 @@
-package WebService::Fitbit::UserAgent;
+package WebService::FitBit::UserAgent;
 
 use 5.006;
 use strict;
@@ -8,12 +8,12 @@ use parent 'LWP::Authen::OAuth';
 
 =head1 NAME
 
-WebService::Fitbit::UserAgent - LWP::Authen::OAuth subclass for
+WebService::FitBit::UserAgent - LWP::Authen::OAuth subclass for
 accessing data on fitbit.com.
 
 =head1 SYNOPSIS
 
-C<WebService::Fitbit::UserAgent> is a C<LWP::Authen::OAuth> subclass
+C<WebService::FitBit::UserAgent> is a C<LWP::Authen::OAuth> subclass
 prepared for performing authenticated requests to fitbit.com.
 
 Please see L<LWP::Authen::OAuth> for API details.
@@ -26,7 +26,7 @@ Henrik Brix Andersen, C<< <brix at cpan.org> >>
 
 Please report any bugs or feature requests to C<bug-webservice-fitbit at
 rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WebService-Fitbit>.  I
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WebService-FitBit>.  I
 will be notified, and then you'll automatically be notified of
 progress on your bug as I make changes.
 
@@ -34,7 +34,7 @@ progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc WebService::Fitbit::UserAgent
+    perldoc WebService::FitBit::UserAgent
 
 You can also look for information at:
 
@@ -42,25 +42,25 @@ You can also look for information at:
 
 =item * RT: CPAN's request tracker (report bugs here)
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=WebService-Fitbit>
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=WebService-FitBit>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
-L<http://annocpan.org/dist/WebService-Fitbit>
+L<http://annocpan.org/dist/WebService-FitBit>
 
 =item * CPAN Ratings
 
-L<http://cpanratings.perl.org/d/WebService-Fitbit>
+L<http://cpanratings.perl.org/d/WebService-FitBit>
 
 =item * Search CPAN
 
-L<http://search.cpan.org/dist/WebService-Fitbit/>
+L<http://search.cpan.org/dist/WebService-FitBit/>
 
 =back
 
 =head1 SEE ALSO
 
-L<LWP::Authen::OAuth>, L<WebService::Fitbit>, L<perlartistic>,
+L<LWP::Authen::OAuth>, L<WebService::FitBit>, L<perlartistic>,
 L<perlgpl>
 
 =head1 LICENSE AND COPYRIGHT
@@ -82,4 +82,4 @@ later version, or
 
 =cut
 
-1; # End of WebService::Fitbit::UserAgent
+1; # End of WebService::FitBit::UserAgent

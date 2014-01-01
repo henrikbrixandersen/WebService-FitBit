@@ -6,12 +6,12 @@ use warnings;
 use Module::Build;
 
 my $builder = Module::Build->new(
-    module_name => 'WebService::Fitbit',
+    module_name => 'WebService::FitBit',
     dist_author => 'Henrik Brix Andersen <brix@cpan.org>',
     license  => 'perl',
     meta_merge => {
         resources => {
-            repository => 'https://github.com/henrikbrixandersen/WebService-Fitbit',
+            repository => 'https://github.com/henrikbrixandersen/WebService-FitBit',
         },
         keywords => ['webservice', 'fitbit'],
     },

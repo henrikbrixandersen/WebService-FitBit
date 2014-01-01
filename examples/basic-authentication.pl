@@ -3,7 +3,7 @@
 use strict;
 use blib;
 
-use WebService::Fitbit;
+use WebService::FitBit;
 
-my $fitbit = WebService::Fitbit->new;
+my $fitbit = WebService::FitBit->new;
 
