@@ -4,6 +4,8 @@ use 5.006;
 use strict;
 use warnings;
 
+use WebService::FitBit;
+
 use parent 'LWP::Authen::OAuth';
 
 =head1 NAME
@@ -34,6 +36,8 @@ sub new {
     $self->{fitbit_request_token_url} = 'https://api.fitbit.com/oauth/request_token';
     $self->{fitbit_authorize_url}     = 'https://www.fitbit.com/oauth/authorize';
     $self->{fitbit_access_token_url}  = 'https://api.fitbit.com/oauth/access_token';
+
+    $self->agent("WebService::FitBit/$WebService::FitBit::VERSION ");
 
     return $self;
 }
