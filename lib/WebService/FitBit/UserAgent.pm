@@ -10,13 +10,32 @@ use parent 'LWP::Authen::OAuth';
 
 =head1 NAME
 
-WebService::FitBit::UserAgent - LWP::Authen::OAuth subclass for
-accessing data on fitbit.com.
+WebService::FitBit::UserAgent is an LWP::Authen::OAuth subclass for
+authenticating and performing authenticated requests against
+fitbit.com.
 
 =head1 SYNOPSIS
 
-C<WebService::FitBit::UserAgent> is a C<LWP::Authen::OAuth> subclass
-prepared for performing authenticated requests to fitbit.com.
+  my $ua = WebService::FitBit::UserAgent->new;
+
+  $ua->oauth_consumer_key($key);
+  $ua->oauth_consumer_secret($secret);
+
+  my $r = $ua->fitbit_request_token;
+  if ($r->is_error) {
+      # handle error
+  }
+
+  my $url = $ua->fitbit_authorize_redirect();
+
+  # redirect user to $url and obtain $verifier
+
+  $r = $ua->fitbit_request_access_token({verifier => $verifier});
+  if ($r->is_success) {
+      # $ua is now ready for performing authenticated requests
+  } else {
+      # handle error
+  }
 
 Please see L<LWP::Authen::OAuth> for full API details.
 
@@ -42,7 +61,7 @@ sub new {
     return $self;
 }
 
-=head2 $url = $ua->fitbit_request_token_url([URL])
+=head2 $url = $ua-E<gt>fitbit_request_token_url([URL])
 
 Get and optionally set the Fitbit C<Request Token> URL. Defaults to
 L<https://api.fitbit.com/oauth/request_token>.
@@ -56,7 +75,7 @@ sub fitbit_request_token_url {
     return $self->{fitbit_request_token_url};
 }
 
-=head2 $url = $ua->fitbit_authorize_url([URL])
+=head2 $url = $ua-E<gt>fitbit_authorize_url([URL])
 
 Get and optionally set the Fitbit C<Authorize> URL. Defaults to
 L<https://www.fitbit.com/oauth/authorize>.
@@ -70,7 +89,7 @@ sub fitbit_authorize_url {
     return $self->{fitbit_authorize_url};
 }
 
-=head2 $url = $ua->fitbit_access_token_url([URL])
+=head2 $url = $ua-E<gt>fitbit_access_token_url([URL])
 
 Get and optionally set the Fitbit C<Access Token> URL. Defaults to
 L<https://api.fitbit.com/oauth/access_token>.
@@ -82,6 +101,65 @@ sub fitbit_access_token_url {
 
     $self->{fitbit_access_token_url} = shift if (@_);
     return $self->{fitbit_access_token_url};
+}
+
+=head2 $response = $ua-E<gt>fitbit_request_token
+
+Post a request for a C<Token> to the URL set using
+C<< $ua->fitbit_request_token_url(...) >>.
+
+The return value is a response object. See L<HTTP::Response> for a
+description of the interface it provides.
+
+=cut
+
+sub fitbit_request_token {
+    my $self = shift;
+
+    my $r = $self->post($self->fitbit_request_token_url);
+    $self->oauth_update_from_response($r) if ($r->is_success);
+
+    return $r;
+}
+
+=head2 $response = $ua-E<gt>fitbit_authorize_redirect({$key => $value, ...})
+
+Returns an URL for redirecting the user to the Fitbit authorization
+page. Additional GET parameters can be supplied in the optional hash
+reference argument. All supplied keys and values must be URL encoded.
+
+=cut
+
+sub fitbit_authorize_redirect {
+    my $self = shift;
+    my $options = shift || {};
+
+    my $url = $self->fitbit_authorize_url . '?oauth_token=' . $self->oauth_token;
+    foreach my $key (keys $options) {
+        $url .= "&$key=" . $options->{$key};
+    }
+
+    return $url;
+}
+
+=head2 $response = $ua-E<gt>fitbit_request_token({verifier => $verifier})
+
+Post a request for an C<Access Token> using the given OAuth
+C<$verifier>to the URL set using C<< $ua->fitbit_access_token_url(...) >>.
+
+The return value is a response object. See L<HTTP::Response> for a
+description of the interface it provides.
+
+=cut
+
+sub fitbit_request_access_token {
+    my $self = shift;
+    my $options = shift;
+
+    my $r = $self->post($self->fitbit_access_token_url, [oauth_verifier => $options->{verifier}]);
+    $self->oauth_update_from_response($r) if ($r->is_success);
+
+    return $r;
 }
 
 =head1 AUTHOR
@@ -126,8 +204,8 @@ L<http://search.cpan.org/dist/WebService-FitBit/>
 
 =head1 SEE ALSO
 
-L<LWP::Authen::OAuth>, L<WebService::FitBit>, L<perlartistic>,
-L<perlgpl>
+L<LWP::Authen::OAuth>, L<WebService::FitBit>, L<HTTP::Response>,
+L<perlartistic>, L<perlgpl>
 
 =head1 LICENSE AND COPYRIGHT
 
