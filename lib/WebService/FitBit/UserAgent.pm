@@ -4,6 +4,7 @@ use 5.006;
 use strict;
 use warnings;
 
+use URI;
 use WebService::FitBit;
 
 use parent 'LWP::Authen::OAuth';
@@ -52,9 +53,9 @@ sub new {
 
     my $self = $class->SUPER::new(@_);
 
-    $self->{fitbit_request_token_url} = 'https://api.fitbit.com/oauth/request_token';
-    $self->{fitbit_authorize_url}     = 'https://www.fitbit.com/oauth/authorize';
-    $self->{fitbit_access_token_url}  = 'https://api.fitbit.com/oauth/access_token';
+    $self->{fitbit_request_token_url} = URI->new('https://api.fitbit.com/oauth/request_token');
+    $self->{fitbit_authorize_url}     = URI->new('https://www.fitbit.com/oauth/authorize');
+    $self->{fitbit_access_token_url}  = URI->new('https://api.fitbit.com/oauth/access_token');
 
     $self->agent("WebService::FitBit/$WebService::FitBit::VERSION ");
 
@@ -63,44 +64,44 @@ sub new {
 
 =head2 $url = $ua-E<gt>fitbit_request_token_url([URL])
 
-Get and optionally set the Fitbit C<Request Token> URL. Defaults to
-L<https://api.fitbit.com/oauth/request_token>.
+Get and optionally set the Fitbit C<Request Token> URL as an L<URI>
+object. Default is L<https://api.fitbit.com/oauth/request_token>.
 
 =cut
 
 sub fitbit_request_token_url {
     my $self = shift;
 
-    $self->{fitbit_request_token_url} = shift if (@_);
-    return $self->{fitbit_request_token_url};
+    $self->{fitbit_request_token_url} = shift->clone if (@_);
+    return $self->{fitbit_request_token_url}->clone;
 }
 
 =head2 $url = $ua-E<gt>fitbit_authorize_url([URL])
 
-Get and optionally set the Fitbit C<Authorize> URL. Defaults to
-L<https://www.fitbit.com/oauth/authorize>.
+Get and optionally set the Fitbit C<Authorize> URL as an L<URI>
+object. Default is L<https://www.fitbit.com/oauth/authorize>.
 
 =cut
 
 sub fitbit_authorize_url {
     my $self = shift;
 
-    $self->{fitbit_authorize_url} = shift if (@_);
-    return $self->{fitbit_authorize_url};
+    $self->{fitbit_authorize_url} = shift->clone if (@_);
+    return $self->{fitbit_authorize_url}->clone;
 }
 
 =head2 $url = $ua-E<gt>fitbit_access_token_url([URL])
 
-Get and optionally set the Fitbit C<Access Token> URL. Defaults to
-L<https://api.fitbit.com/oauth/access_token>.
+Get and optionally set the Fitbit C<Access Token> URL as an L<URI>
+object. Default is L<https://api.fitbit.com/oauth/access_token>.
 
 =cut
 
 sub fitbit_access_token_url {
     my $self = shift;
 
-    $self->{fitbit_access_token_url} = shift if (@_);
-    return $self->{fitbit_access_token_url};
+    $self->{fitbit_access_token_url} = shift->clone if (@_);
+    return $self->{fitbit_access_token_url}->clone;
 }
 
 =head2 $response = $ua-E<gt>fitbit_request_token
@@ -108,8 +109,7 @@ sub fitbit_access_token_url {
 Post a request for a C<Token> to the URL set using
 C<< $ua->fitbit_request_token_url(...) >>.
 
-The return value is a response object. See L<HTTP::Response> for a
-description of the interface it provides.
+The return value is an L<HTTP::Response> object.
 
 =cut
 
@@ -122,22 +122,20 @@ sub fitbit_request_token {
     return $r;
 }
 
-=head2 $response = $ua-E<gt>fitbit_authorize_redirect({$key => $value, ...})
+=head2 $response = $ua-E<gt>fitbit_authorize_redirect
 
-Returns an URL for redirecting the user to the Fitbit authorization
-page. Additional GET parameters can be supplied in the optional hash
-reference argument. All supplied keys and values must be URL encoded.
+Returns an URL to be used for redirecting the user to the Fitbit
+authorization page.
+
+The return value is an L<URI> object.
 
 =cut
 
 sub fitbit_authorize_redirect {
     my $self = shift;
-    my $options = shift || {};
 
-    my $url = $self->fitbit_authorize_url . '?oauth_token=' . $self->oauth_token;
-    foreach my $key (keys $options) {
-        $url .= "&$key=" . $options->{$key};
-    }
+    my $url = $self->fitbit_authorize_url->clone;
+    $url->query_form('oauth_token' => $self->oauth_token);
 
     return $url;
 }
@@ -147,8 +145,7 @@ sub fitbit_authorize_redirect {
 Post a request for an C<Access Token> using the given OAuth
 C<$verifier>to the URL set using C<< $ua->fitbit_access_token_url(...) >>.
 
-The return value is a response object. See L<HTTP::Response> for a
-description of the interface it provides.
+The return value is an L<HTTP::Response> object.
 
 =cut
 
@@ -204,8 +201,8 @@ L<http://search.cpan.org/dist/WebService-FitBit/>
 
 =head1 SEE ALSO
 
-L<LWP::Authen::OAuth>, L<WebService::FitBit>, L<HTTP::Response>,
-L<perlartistic>, L<perlgpl>
+L<LWP::Authen::OAuth>, L<WebService::FitBit>, L<URI>,
+L<HTTP::Response>, L<perlartistic>, L<perlgpl>
 
 =head1 LICENSE AND COPYRIGHT
 
