@@ -31,9 +31,9 @@ sub new {
 
     my $self = $class->SUPER::new(@_);
 
-    $self->{fitbit_request_token_url} = 'http://api.fitbit.com/oauth/request_token';
-    $self->{fitbit_authorize_url}     = 'http://www.fitbit.com/oauth/authorize';
-    $self->{fitbit_access_token_url}  = 'http://api.fitbit.com/oauth/access_token';
+    $self->{fitbit_request_token_url} = 'https://api.fitbit.com/oauth/request_token';
+    $self->{fitbit_authorize_url}     = 'https://www.fitbit.com/oauth/authorize';
+    $self->{fitbit_access_token_url}  = 'https://api.fitbit.com/oauth/access_token';
 
     return $self;
 }
@@ -41,7 +41,7 @@ sub new {
 =head2 $url = $ua->fitbit_request_token_url([URL])
 
 Get and optionally set the Fitbit C<Request Token> URL. Defaults to
-L<http://api.fitbit.com/oauth/request_token>.
+L<https://api.fitbit.com/oauth/request_token>.
 
 =cut
 
@@ -55,7 +55,7 @@ sub fitbit_request_token_url {
 =head2 $url = $ua->fitbit_authorize_url([URL])
 
 Get and optionally set the Fitbit C<Authorize> URL. Defaults to
-L<http://www.fitbit.com/oauth/authorize>.
+L<https://www.fitbit.com/oauth/authorize>.
 
 =cut
 
@@ -69,7 +69,7 @@ sub fitbit_authorize_url {
 =head2 $url = $ua->fitbit_access_token_url([URL])
 
 Get and optionally set the Fitbit C<Access Token> URL. Defaults to
-L<http://api.fitbit.com/oauth/access_token>.
+L<https://api.fitbit.com/oauth/access_token>.
 
 =cut
 
