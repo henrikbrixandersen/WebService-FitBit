@@ -20,8 +20,9 @@ our $VERSION = '0.10';
 
 =head1 SYNOPSIS
 
-C<WebService::FitBit> provides an API for accessing data on
-L<http://fitbit.com>.
+  my $fitbit = WebService::FitBit->new;
+
+  # ... authenticate $fitbit->useragent here
 
 =head1 METHODS
 
@@ -39,7 +40,9 @@ L<LWP::UserAgent> subclass capable of performing OAuth authenticated
 requests againt fitbit.com).
 
 A default, unauthenticated L<WebService::FitBit::UserAgent> instance
-will be provided for you if this key is not specified.
+will be provided for you if this key is not specified. You will need
+to complete the authentication process described in
+L<WebService::FitBit::UserAgent> before any requests can be performed.
 
 =back
 
@@ -64,10 +67,10 @@ sub new {
     return $self;
 }
 
-=head2 $ua = $fitbit->useragent()
+=head2 $ua = $fitbit-E<gt>useragent
 
 Get the L<LWP::UserAgent> instance used for making authenticated
-requests against fitbit.com, typically an instance of
+requests against fitbit.com. Default is an instance of
 L<WebService::FitBit::UserAgent>.
 
 =cut
