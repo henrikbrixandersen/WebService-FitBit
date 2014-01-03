@@ -28,7 +28,7 @@ fitbit.com.
       # handle error
   }
 
-  my $url = $ua->fitbit_authorize_redirect();
+  my $url = $ua->fitbit_authorize_redirect;
 
   # redirect user to $url and obtain $verifier
 
@@ -56,6 +56,7 @@ sub new {
 
     $self->{fitbit_request_token_url} = URI->new('https://api.fitbit.com/oauth/request_token');
     $self->{fitbit_authorize_url}     = URI->new('https://www.fitbit.com/oauth/authorize');
+    $self->{fitbit_authenticate_url}  = URI->new('https://www.fitbit.com/oauth/authenticate');
     $self->{fitbit_access_token_url}  = URI->new('https://api.fitbit.com/oauth/access_token');
 
     $self->agent("WebService::FitBit/$WebService::FitBit::VERSION ");
@@ -91,6 +92,20 @@ sub fitbit_authorize_url {
     return $self->{fitbit_authorize_url}->clone;
 }
 
+=head2 $url = $ua-E<gt>fitbit_authenticate_url([URL])
+
+Get and optionally set the Fitbit C<Authenticate> URL as an L<URI>
+object. Default is L<https://www.fitbit.com/oauth/authenticate>.
+
+=cut
+
+sub fitbit_authenticate_url {
+    my $self = shift;
+
+    $self->{fitbit_authenticate_url} = shift->clone if (@_);
+    return $self->{fitbit_authenticate_url}->clone;
+}
+
 =head2 $url = $ua-E<gt>fitbit_access_token_url([URL])
 
 Get and optionally set the Fitbit C<Access Token> URL as an L<URI>
@@ -123,11 +138,24 @@ sub fitbit_request_token {
     return $r;
 }
 
+sub _fitbit_generic_redirect {
+    my ($self, $url, @params) = @_;
+
+    my $clone = $url->clone;
+    $clone->query_form(@params) if (@params);
+
+    $clone->query_param_delete('oauth_token');
+    $clone->query_param_append('oauth_token' => $self->oauth_token);
+
+    return $clone;
+}
+
 =head2 $response = $ua-E<gt>fitbit_authorize_redirect(...)
 
 Returns an URL to be used for redirecting the user to the Fitbit
-authorization page. It takes the same types of arguments for
-specifying additional query parameters as L<URI/query_form>.
+authorization page (referred to as C<Basic Workflow> in the Fitbit
+API). It takes the same types of arguments for specifying additional
+query parameters as L<URI/query_form>.
 
 The following additional query parameters are documented in the Fitbit
 API:
@@ -149,11 +177,26 @@ The return value is an L<URI> object.
 sub fitbit_authorize_redirect {
     my $self = shift;
 
-    my $url = $self->fitbit_authorize_url->clone;
-    $url->query_form(@_) if (@_);
+    my $url = $self->_fitbit_generic_redirect($self->fitbit_authorize_url, @_);
 
-    $url->query_param_delete('oauth_token');
-    $url->query_param_append('oauth_token' => $self->oauth_token);
+    return $url;
+}
+
+=head2 $response = $ua-E<gt>fitbit_authenticate_redirect(...)
+
+Returns an URL to be used for redirecting the user to the Fitbit
+authentication page (referred to as C<Extended Workflow> in the Fitbit
+API). It takes the same types of arguments for specifying additional
+query parameters as L</fitbit_authorize_redirect>.
+
+The return value is an L<URI> object.
+
+=cut
+
+sub fitbit_authenticate_redirect {
+    my $self = shift;
+
+    my $url = $self->_fitbit_generic_redirect($self->fitbit_authenticate_url, @_);
 
     return $url;
 }
@@ -161,7 +204,7 @@ sub fitbit_authorize_redirect {
 =head2 $response = $ua-E<gt>fitbit_request_token({verifier => $verifier})
 
 Post a request for an C<Access Token> using the given OAuth
-C<$verifier>to the URL set using C<< $ua->fitbit_access_token_url(...) >>.
+C<verifier> to the URL set using C<< $ua->fitbit_access_token_url(...) >>.
 
 The return value is an L<HTTP::Response> object.
 
