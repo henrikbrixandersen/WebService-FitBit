@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use URI;
+use URI::QueryParam;
 use WebService::FitBit;
 
 use parent 'LWP::Authen::OAuth';
@@ -122,10 +123,24 @@ sub fitbit_request_token {
     return $r;
 }
 
-=head2 $response = $ua-E<gt>fitbit_authorize_redirect
+=head2 $response = $ua-E<gt>fitbit_authorize_redirect(...)
 
 Returns an URL to be used for redirecting the user to the Fitbit
-authorization page.
+authorization page. It takes the same types of arguments for
+specifying additional query parameters as L<URI/query_form>.
+
+The following additional query parameters are documented in the Fitbit
+API:
+
+=over 4
+
+=item * locale
+
+=item * display
+
+=item * requestCredentials
+
+=back
 
 The return value is an L<URI> object.
 
@@ -135,7 +150,10 @@ sub fitbit_authorize_redirect {
     my $self = shift;
 
     my $url = $self->fitbit_authorize_url->clone;
-    $url->query_form('oauth_token' => $self->oauth_token);
+    $url->query_form(@_) if (@_);
+
+    $url->query_param_delete('oauth_token');
+    $url->query_param_append('oauth_token' => $self->oauth_token);
 
     return $url;
 }

@@ -30,7 +30,7 @@ my $r = $ua->fitbit_request_token;
 die $r->status_line if ($r->is_error);
 print "\n";
 
-my $url = $ua->fitbit_authorize_redirect();
+my $url = $ua->fitbit_authorize_redirect;
 print "Now visit: $url\n";
 print "Enter the Verifier obtained from the above URL: ";
 my $verifier = <STDIN>;
