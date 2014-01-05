@@ -22,6 +22,7 @@ my $builder = Module::Build->new(
 
     requires => {
         'perl' => '5.008',
+        'Carp' => '0',
         'LWP::Authen::OAuth' => '1.02',
         'Moo' => '1.004002',
         'URI' => '1.60',
