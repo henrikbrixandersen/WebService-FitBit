@@ -1,14 +1,26 @@
 package WebService::FitBit::UserAgent;
 
-use 5.006;
+use 5.008;
 use strict;
 use warnings;
 
+use Carp;
 use URI;
 use URI::QueryParam;
 use WebService::FitBit;
 
-use parent 'LWP::Authen::OAuth';
+use Moo;
+use namespace::clean;
+
+extends 'LWP::Authen::OAuth';
+
+for my $url (qw/request_token authorize authenticate access_token/) {
+    has "fitbit_${url}_url" => (
+        is => 'rw',
+        builder => 1,
+        isa => sub { croak 'Must be of type URI' unless $_[0]->isa('URI') },
+    );
+}
 
 =head1 NAME
 
@@ -47,23 +59,6 @@ Please see L<LWP::Authen::OAuth> for full API details.
 
 Takes the same options as L<LWP::Authen::OAuth/new>.
 
-=cut
-
-sub new {
-    my $class = shift;
-
-    my $self = $class->SUPER::new(@_);
-
-    $self->{fitbit_request_token_url} = URI->new('https://api.fitbit.com/oauth/request_token');
-    $self->{fitbit_authorize_url}     = URI->new('https://www.fitbit.com/oauth/authorize');
-    $self->{fitbit_authenticate_url}  = URI->new('https://www.fitbit.com/oauth/authenticate');
-    $self->{fitbit_access_token_url}  = URI->new('https://api.fitbit.com/oauth/access_token');
-
-    $self->agent("WebService::FitBit/$WebService::FitBit::VERSION ");
-
-    return $self;
-}
-
 =head2 $url = $ua-E<gt>fitbit_request_token_url([URL])
 
 Get and optionally set the Fitbit C<Request Token> URL as an L<URI>
@@ -71,11 +66,8 @@ object. Default is L<https://api.fitbit.com/oauth/request_token>.
 
 =cut
 
-sub fitbit_request_token_url {
-    my $self = shift;
-
-    $self->{fitbit_request_token_url} = shift->clone if (@_);
-    return $self->{fitbit_request_token_url}->clone;
+sub _build_fitbit_request_token_url {
+    URI->new('https://api.fitbit.com/oauth/request_token');
 }
 
 =head2 $url = $ua-E<gt>fitbit_authorize_url([URL])
@@ -85,11 +77,8 @@ object. Default is L<https://www.fitbit.com/oauth/authorize>.
 
 =cut
 
-sub fitbit_authorize_url {
-    my $self = shift;
-
-    $self->{fitbit_authorize_url} = shift->clone if (@_);
-    return $self->{fitbit_authorize_url}->clone;
+sub _build_fitbit_authorize_url {
+    URI->new('https://www.fitbit.com/oauth/authorize');
 }
 
 =head2 $url = $ua-E<gt>fitbit_authenticate_url([URL])
@@ -99,11 +88,8 @@ object. Default is L<https://www.fitbit.com/oauth/authenticate>.
 
 =cut
 
-sub fitbit_authenticate_url {
-    my $self = shift;
-
-    $self->{fitbit_authenticate_url} = shift->clone if (@_);
-    return $self->{fitbit_authenticate_url}->clone;
+sub _build_fitbit_authenticate_url {
+    URI->new('https://www.fitbit.com/oauth/authenticate');
 }
 
 =head2 $url = $ua-E<gt>fitbit_access_token_url([URL])
@@ -113,11 +99,8 @@ object. Default is L<https://api.fitbit.com/oauth/access_token>.
 
 =cut
 
-sub fitbit_access_token_url {
-    my $self = shift;
-
-    $self->{fitbit_access_token_url} = shift->clone if (@_);
-    return $self->{fitbit_access_token_url}->clone;
+sub _build_fitbit_access_token_url {
+    URI->new('https://api.fitbit.com/oauth/access_token');
 }
 
 =head2 $response = $ua-E<gt>fitbit_request_token
@@ -218,6 +201,11 @@ sub fitbit_request_access_token {
     $self->oauth_update_from_response($r) if ($r->is_success);
 
     return $r;
+}
+
+sub _agent {
+    my $self = shift;
+    return "WebService::FitBit/$WebService::FitBit::VERSION " . $self->SUPER::_agent;
 }
 
 =head1 AUTHOR
