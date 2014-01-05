@@ -20,19 +20,16 @@ my $builder = Module::Build->new(
         'Module::Build' => '0.4004',
     },
 
-    test_requires => {
-        'Config' => '0',
+    requires => {
+        'perl' => '5.008',
         'LWP::Authen::OAuth' => '1.02',
-        'REST::Client' => '271',
-        'Test::More' => '0',
+        'Moo' => '1.004002',
         'URI' => '1.60',
     },
 
-    requires => {
-        'perl' => '5.006',
-        'LWP::Authen::OAuth' => '1.02',
-        'REST::Client' => '271',
-        'URI' => '1.60',
+    test_requires => {
+        'Config' => '0',
+        'Test::More' => '0',
     },
 );
 
