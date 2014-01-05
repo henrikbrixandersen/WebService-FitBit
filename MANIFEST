@@ -1,7 +1,10 @@
 Build.PL
 Changes
+examples/basic-authentication.pl
 lib/WebService/FitBit.pm
+lib/WebService/FitBit/UserAgent.pm
 LICENSE
 MANIFEST			This list of files
 README.md
 t/00-load.t
+t/10-useragent.t
